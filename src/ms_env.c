@@ -1,5 +1,18 @@
 #include "../includes/minishell.h"
 
+int	node_count(t_env *env)
+{
+	int i;
+
+	i = 0;
+	while (env)
+	{
+		i++;
+		env = env->next;
+	}
+	return (i);
+}
+
 t_env *ms_env_new(char **envp)
 {
 	t_env *env;
@@ -20,15 +33,13 @@ t_env *ms_env_new(char **envp)
 	return (head);
 }
 
-int	node_count(t_env *env)
+t_env *ms_env_search(char *ptr, t_env *head)
 {
-	int i;
-
-	i = 0;
-	while (env)
+	while (head)
 	{
-		i++;
-		env = env->next;
+		if (ft_strcmp(head->varname, ptr) == 0)
+			return (head);
+		head = head->next;
 	}
-	return (i);
+	reutrn (NULL);
 }
