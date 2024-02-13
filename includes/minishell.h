@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "../lib/libft/libft.h"
 #include <stdbool.h>
 
 typedef enum 
@@ -33,5 +34,9 @@ typedef struct t_env
     char *value;
     struct t_env *next;
 }t_env;
+
+
+// function defs
+char **ms_parse(char *cmd);
 
 #endif

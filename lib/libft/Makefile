@@ -6,7 +6,7 @@
 #    By: alakhida <alakhida@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/06 19:40:42 by alakhida          #+#    #+#              #
-#    Updated: 2023/05/17 01:07:02 by alakhida         ###   ########.fr        #
+#    Updated: 2024/02/13 01:53:42 by lhorbax          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ CC = gcc
 all: $(NAME)
 
 $(NAME):
-	$(CC) -c $(FLAGS) $(SRCS) -I $(HEADERS)
+	$(CC) -c $(FLAGS) $(SRCS)
 	ar rcs $(NAME) $(OBJECTS)
 
 clean:
