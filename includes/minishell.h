@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "../lib/libft/libft.h"
 #include <stdbool.h>
 
 typedef enum 
