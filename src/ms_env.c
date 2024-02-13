@@ -3,28 +3,31 @@
 t_env *ms_env_new(char **envp)
 {
 	t_env *env;
-	char *env_name;
-	char *env_value;
+	t_env *head;
 	int i;
 
 	i = 0;
-	env = (t_env *)malloc(sizeof(t_env));
-
-	while (env)
+	head = (t_env *)malloc(sizeof(t_env));
+	env = head;
+	while (envp[i])
 	{
-		env_name = ft_strchr(t_env.varname, '=');
-		env_value = ft_strncpy(env_name + 1, d); 
+		env->varname = ft_strldup(envp[i], ft_strchr(envp[i], '=') - envp[i]);
+		env->value = ft_strdup(ft_strchr(envp[i], '=') + 1);
+		env->next = (t_env *)malloc(sizeof(t_env));
 		env = env->next;
-		env->next = NULL;
+		i++;
 	}
 	return (env);
 }
 
-char *kmala(char *str, int i)
+int	node_count(t_env *env)
 {
-	char *new_str;
+	int i;
 
-	i += 1;
-	new_str = (char *)malloc(sizeof(char) * (i + 1));
-	
+	i = 0;
+	while (env)
+	{
+		i++;
+		env = env->next;
+	}
 }
