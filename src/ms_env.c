@@ -26,4 +26,5 @@ char *kmala(char *str, int i)
 
 	i += 1;
 	new_str = (char *)malloc(sizeof(char) * (i + 1));
+	
 }
