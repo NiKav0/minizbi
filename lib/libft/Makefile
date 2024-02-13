@@ -6,7 +6,7 @@
 #    By: alakhida <alakhida@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/06 19:40:42 by alakhida          #+#    #+#              #
-#    Updated: 2024/02/13 01:53:42 by lhorbax          ###   ########.fr        #
+#    Updated: 2024/02/13 02:37:52 by lhorbax          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRCS=ft_memset.c ft_isalnum.c ft_isascii.c \
 	ft_substr.c ft_strjoin.c ft_strtrim.c \
 	ft_split.c ft_itoa.c ft_strmapi.c \
 	ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c \
-	ft_putendl_fd.c ft_putnbr_fd.c 
+	ft_putendl_fd.c ft_putnbr_fd.c ft_strldup.c
 
 OBJECTS= ${SRCS:.c=.o}
 

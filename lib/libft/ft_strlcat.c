@@ -6,7 +6,7 @@
 /*   By: alakhida <alakhida@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 21:19:51 by alakhida          #+#    #+#             */
-/*   Updated: 2022/11/03 22:24:32 by alakhida         ###   ########.fr       */
+/*   Updated: 2024/02/13 02:34:35 by lhorbax          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ unsigned int	ft_strlcat(char *dst, const char *src, size_t dstsize)
 	size_t	lsrc;
 
 	ldst = ft_strlen(dst);
-	lsrc = ft_strlen(src);
+	lsrc = ft_strlen((char *)src);
 	if (dstsize == 0)
 		return (lsrc);
 	if (dstsize < ldst)

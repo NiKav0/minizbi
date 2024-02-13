@@ -6,7 +6,7 @@
 /*   By: alakhida <alakhida@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 11:46:41 by alakhida          #+#    #+#             */
-/*   Updated: 2022/10/25 14:39:46 by alakhida         ###   ########.fr       */
+/*   Updated: 2024/02/13 02:35:08 by lhorbax          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ char	*ft_strtrim(char const *s1, char const *set)
 		return (0);
 	i = 0;
 	s = 0;
-	e = ft_strlen(s1) - 1;
+	e = ft_strlen((char *)s1) - 1;
 	while (s1[i] && ft_strchr(set, s1[i]))
 		s = (i++) + 1;
-	if (s >= ft_strlen(s1))
+	if (s >= (size_t) ft_strlen((char *)s1))
 		return ((char *)ft_calloc(sizeof(char), 1));
-	i = ft_strlen(s1) - 1;
+	i = ft_strlen((char *)s1) - 1;
 	while (i && s1[i] && ft_strchr(set, s1[i]))
 		e = (i--) - 1;
-	return (ft_substr(s1, s, (e - s + 1)));
+	return (ft_substr((char *)s1, s, (e - s + 1)));
 }

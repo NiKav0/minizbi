@@ -6,7 +6,7 @@
 /*   By: alakhida <alakhida@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 14:09:58 by alakhida          #+#    #+#             */
-/*   Updated: 2022/11/04 01:02:34 by alakhida         ###   ########.fr       */
+/*   Updated: 2024/02/13 02:32:30 by lhorbax          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strmapi(char const *s, char (*f) (unsigned int, char))
 	i = 0;
 	if (!s || !f)
 		return (0);
-	len = ft_strlen(s);
+	len = ft_strlen((char *)s);
 	result = (char *)malloc(sizeof(char) * (len + 1));
 	if (!result)
 		return (0);

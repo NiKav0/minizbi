@@ -10,6 +10,7 @@ int	ms_prompt(t_env *env){
 		return (2);
 	lexed = ms_parse(cmd);
 	(void) lexed;
+	(void) env;
 	return (0);
 }
 
@@ -23,15 +24,8 @@ int main(int argc, char **argv, char **envp){
 	if (envp == NULL)
 		return (EXIT_FAILURE);
 	env = ms_env_new(envp);
-	// delete me
-	int i = 0;
-	while (env->next != NULL){
-		printf("\tvarname -> %s\t value -> %s\n", env->varname, env->value);
-		env = env->next;
-	}
-
 	while (true) {
-		cmd_status = ms_prompt();
+		cmd_status = ms_prompt(env);
 		if (cmd_status != 0)
 			return (cmd_status);
 	}

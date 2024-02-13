@@ -6,7 +6,7 @@
 #    By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/10 00:43:31 by calmouht          #+#    #+#              #
-#    Updated: 2024/02/13 02:26:28 by lhorbax          ###   ########.fr        #
+#    Updated: 2024/02/13 02:37:12 by lhorbax          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,8 @@ CFLAGS = -Wformat=2 -O3 -ffast-math -pedantic -Wunreachable-code -Wfloat-equal -
 CC = gcc
 NAME = minishell
 LIBFT = lib/libft/libft.a
-OBJ = build/main.o build/ms_parse.o
-SRC := src/main.c src/ms_parse.c
+OBJ = build/main.o build/ms_parse.o build/ms_env.o
+SRC := src/main.c src/ms_parse.c src/ms_env.c
 INCLUDE = includes/
 
 build/%.o : src/%.c

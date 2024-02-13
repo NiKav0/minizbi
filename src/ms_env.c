@@ -17,7 +17,7 @@ t_env *ms_env_new(char **envp)
 		env = env->next;
 		i++;
 	}
-	return (env);
+	return (head);
 }
 
 int	node_count(t_env *env)
@@ -30,4 +30,5 @@ int	node_count(t_env *env)
 		i++;
 		env = env->next;
 	}
+	return (i);
 }

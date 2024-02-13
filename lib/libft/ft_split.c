@@ -6,7 +6,7 @@
 /*   By: alakhida <alakhida@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 16:29:08 by alakhida          #+#    #+#             */
-/*   Updated: 2022/10/26 14:52:30 by alakhida         ###   ########.fr       */
+/*   Updated: 2024/02/13 02:35:27 by lhorbax          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static size_t	count(char const *s, char c)
 
 	i = 0;
 	cnt = 0;
-	while (i < ft_strlen(s))
+	while (i < (size_t) ft_strlen((char *) s))
 	{
 		i = schar(s, c, i);
 		b = echar(s, c, i);
@@ -58,7 +58,7 @@ static void	split(char **r, char const *s, char c)
 		i = schar(s, c, i);
 		b = echar(s, c, i);
 		if (i < b)
-			r[cnt++] = ft_substr(s, i, (b - i));
+			r[cnt++] = ft_substr((char *)s, i, (b - i));
 		i = b;
 	}
 	r[cnt] = NULL;

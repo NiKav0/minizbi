@@ -38,5 +38,6 @@ typedef struct t_env
 
 // function defs
 char **ms_parse(char *cmd);
+t_env *ms_env_new(char **envp);
 
 #endif
