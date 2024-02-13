@@ -7,6 +7,15 @@
 #include <readline/history.h>
 #include <stdbool.h>
 
+typedef enum 
+{
+	NONE,
+	HEREDOC,	//<<
+	LREDIR,		// <
+ 	RREDIR,		// >
+ 	APPEND,		// >>
+}e_type;
+
 typedef struct	ms_cmd
 {
 	char **cmd;
@@ -17,16 +26,8 @@ typedef struct	ms_cmd
 	struct s_cmd *next;
 }t_cmd;
 
-enum
-{
-	NONE,
-	HEREDOC,	//<<
-	LREDIR,		// <
- 	RREDIR,		// >
- 	APPEND,		// >>
-}e_type;
 
-typedef struct ms_env
+typedef struct t_env
 {
 	char *varname;
 	char *value;
