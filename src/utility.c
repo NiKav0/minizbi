@@ -1,7 +1,7 @@
 #include "../includes/minishell.h"
 #include <stdio.h>
 
-e_type ms_ctrlop(char *str)
+e_type ms_ctrloop(char *str)
 {
 	if (ft_strcmp(str, "<<") == 0)
 		return (HEREDOC);
@@ -11,6 +11,8 @@ e_type ms_ctrlop(char *str)
 		return (RREDIR);
 	else if (ft_strcmp(str, ">>") == 0)
 		return (APPEND);
+	else if (ft_strcmp(str, "|") == 0)
+		return (PIPE);
 	else
 		return (NONE);
 }

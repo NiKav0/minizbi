@@ -11,10 +11,11 @@
 typedef enum 
 {
     NONE,
-    HEREDOC,    //<<
-    LREDIR,        // <
+    HEREDOC,        //<<
+    LREDIR,         // <
      RREDIR,        // >
      APPEND,        // >>
+     PIPE,          // |
 }e_type;
 
 typedef struct    ms_cmd

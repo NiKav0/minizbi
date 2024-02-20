@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ms_parse.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/19 03:18:12 by calmouht          #+#    #+#             */
+/*   Updated: 2024/02/19 03:18:13 by calmouht         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 static int	ms_skip_sep(char *s)
@@ -36,7 +48,8 @@ static int	ms_lexlen(char *s)
 	return (i);
 }
 
-int ms_count(char *s){
+int ms_count(char *s)
+{
 	int		iter;
 	int		count;
 
@@ -57,7 +70,8 @@ int ms_count(char *s){
 	return (count);
 }
 
-char **ms_parse(char *cmd){
+char **ms_parse(char *cmd)
+{
 	char **lexed ;
 	int i;
 	int lexed_i;
@@ -68,7 +82,8 @@ char **ms_parse(char *cmd){
 		return NULL;
 	lexed = (char **) malloc((ms_count(cmd) + 1) * sizeof(char *));
 	ft_bzero(lexed, (ms_count(cmd) + 1) * sizeof(char *));
-	while (cmd[i] != '\0'){
+	while (cmd[i] != '\0')
+	{
 		while (cmd[i] != '\0' && (cmd[i] == ' ' || cmd[i] == '\t'))
 			i++;
 		if (cmd[i] == '\0')

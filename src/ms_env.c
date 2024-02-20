@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ms_env.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/19 03:18:15 by calmouht          #+#    #+#             */
+/*   Updated: 2024/02/19 04:46:45 by calmouht         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 int	node_count(t_env *env)
@@ -42,4 +54,36 @@ t_env *ms_env_search(char *ptr, t_env *head)
 		head = head->next;
 	}
 	reutrn (NULL);
+}
+
+char *expanded(char *cmd)
+{
+	int i;
+	int k;
+	int ex_len;
+	char *l7asol;
+
+	i = 0;
+	while ((cmd[i]))
+	{
+		if (cmd[i] == '$')
+		{
+			i++;
+			k = i;
+			while (ft_isalnum(cmd[k]) || cmd[k] == '_' || cmd[k] == '?' || cmd[k] == '=')
+				k++;
+				break;
+		}
+		if (cmd[i] == '\'')
+		{
+			i++;
+			while (cmd[i] != '\'')
+				i++;
+		}
+		i++;
+	}
+	ex_len = k - i;
+	l7asol = malloc(sizeof(char) * (ex_len + 1));
+	ft_strlcpy(l7asol, cmd, ex_len);
+	return (l7asol);
 }
