@@ -6,7 +6,7 @@
 /*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 03:18:15 by calmouht          #+#    #+#             */
-/*   Updated: 2024/02/19 04:46:45 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/03/08 07:14:09 by calmouht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	node_count(t_env *env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (env)
@@ -25,11 +25,11 @@ int	node_count(t_env *env)
 	return (i);
 }
 
-t_env *ms_env_new(char **envp)
+t_env	*ms_env_new(char **envp)
 {
-	t_env *env;
-	t_env *head;
-	int i;
+	t_env	*env;
+	t_env	*head;
+	int		i;
 
 	i = 0;
 	head = (t_env *)malloc(sizeof(t_env));
@@ -45,7 +45,7 @@ t_env *ms_env_new(char **envp)
 	return (head);
 }
 
-t_env *ms_env_search(char *ptr, t_env *head)
+t_env	*ms_env_search(char *ptr, t_env *head)
 {
 	while (head)
 	{
@@ -53,26 +53,28 @@ t_env *ms_env_search(char *ptr, t_env *head)
 			return (head);
 		head = head->next;
 	}
-	reutrn (NULL);
+	return(NULL);
 }
 
-char *expanded(char *cmd)
+char	*expanded(char *cmd)
 {
-	int i;
-	int k;
-	int ex_len;
-	char *l7asol;
+	int		i;
+	int		k;
+	int		ex_len;
+	char	*l7asol;
 
 	i = 0;
+	k = 0;
 	while ((cmd[i]))
 	{
 		if (cmd[i] == '$')
 		{
 			i++;
 			k = i;
-			while (ft_isalnum(cmd[k]) || cmd[k] == '_' || cmd[k] == '?' || cmd[k] == '=')
+			while (ft_isalnum(cmd[k]) || cmd[k] == '_' || cmd[k] == '?'
+				|| cmd[k] == '=')
 				k++;
-				break;
+			break ;
 		}
 		if (cmd[i] == '\'')
 		{
@@ -82,6 +84,8 @@ char *expanded(char *cmd)
 		}
 		i++;
 	}
+	if (k == 0)
+		return (NULL);
 	ex_len = k - i;
 	l7asol = malloc(sizeof(char) * (ex_len + 1));
 	ft_strlcpy(l7asol, cmd, ex_len);

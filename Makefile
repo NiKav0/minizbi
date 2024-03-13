@@ -6,17 +6,19 @@
 #    By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/10 00:43:31 by calmouht          #+#    #+#              #
-#    Updated: 2024/02/13 02:37:12 by lhorbax          ###   ########.fr        #
+#    Updated: 2024/03/08 08:05:35 by calmouht         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS = -Wformat=2 -O3 -ffast-math -pedantic -Wunreachable-code -Wfloat-equal -Warray-bounds -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 CC = gcc
 NAME = minishell
 LIBFT = lib/libft/libft.a
-OBJ = build/main.o build/ms_parse.o build/ms_env.o
-SRC := src/main.c src/ms_parse.c src/ms_env.c
-INCLUDE = includes/
+OBJ = build/main.o build/ms_parse.o build/ms_env.o build/ms_cmdgen.o build/ms_cmdrender.o build/ms_env_clone.o \
+		build/ms_errors.o build/utility.o
+SRC = src/main.c src/ms_parse.c src/ms_env.c src/ms_cmdgen.c src/ms_cmdrender.c src/ms_env_clone.c \
+		src/ms_errors.c src/utility.c
+INCLUDE = includes/minishell.h
 
 build/%.o : src/%.c
 	$(CC) $< $(CFLAGS) -I$(INCLUDE) -c -o $@

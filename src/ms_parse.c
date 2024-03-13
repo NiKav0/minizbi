@@ -48,10 +48,10 @@ static int	ms_lexlen(char *s)
 	return (i);
 }
 
-int ms_count(char *s)
+int	ms_count(char *s)
 {
-	int		iter;
-	int		count;
+	int	iter;
+	int	count;
 
 	iter = 0;
 	count = 0;
@@ -70,17 +70,17 @@ int ms_count(char *s)
 	return (count);
 }
 
-char **ms_parse(char *cmd)
+char	**ms_parse(char *cmd)
 {
-	char **lexed ;
-	int i;
-	int lexed_i;
+	char	**lexed;
+	int		i;
+	int		lexed_i;
 
 	i = 0;
 	lexed_i = 0;
 	if (cmd == NULL)
-		return NULL;
-	lexed = (char **) malloc((ms_count(cmd) + 1) * sizeof(char *));
+		return (NULL);
+	lexed = (char **)malloc((ms_count(cmd) + 1) * sizeof(char *));
 	ft_bzero(lexed, (ms_count(cmd) + 1) * sizeof(char *));
 	while (cmd[i] != '\0')
 	{
