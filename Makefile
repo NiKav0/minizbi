@@ -6,11 +6,11 @@
 #    By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/10 00:43:31 by calmouht          #+#    #+#              #
-#    Updated: 2024/03/08 08:05:35 by calmouht         ###   ########.fr        #
+#    Updated: 2024/03/24 07:27:26 by calmouht         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g
 CC = gcc
 NAME = minishell
 LIBFT = lib/libft/libft.a
