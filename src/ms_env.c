@@ -6,7 +6,7 @@
 /*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 03:18:15 by calmouht          #+#    #+#             */
-/*   Updated: 2024/03/08 07:14:09 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/03/30 08:36:57 by calmouht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_env	*ms_env_search(char *ptr, t_env *head)
 {
 	while (head)
 	{
+		printf("var_name: %s                     ptr: %s\n", head->varname, ptr);
 		if (ft_strcmp(head->varname, ptr) == 0)
 			return (head);
 		head = head->next;
@@ -88,6 +89,6 @@ char	*expanded(char *cmd)
 		return (NULL);
 	ex_len = k - i;
 	l7asol = malloc(sizeof(char) * (ex_len + 1));
-	ft_strlcpy(l7asol, cmd, ex_len);
+	ft_strlcpy(l7asol, &cmd[i], ex_len + 1);
 	return (l7asol);
 }
