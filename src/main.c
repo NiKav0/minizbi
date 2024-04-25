@@ -6,7 +6,7 @@
 /*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 03:18:08 by calmouht          #+#    #+#             */
-/*   Updated: 2024/03/30 08:01:54 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/04/15 17:14:38 by calmouht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,13 @@ int	ms_prompt(t_env *env)
 		int i = 0;
 		while(cmd2->cmd[i])
 		{
-			printf("%s \n", cmd2->cmd[i]);
+			printf("\'%s\' \n", cmd2->cmd[i]);
 			i++;
 		}
-		puts(":C===3");
+		// puts(":C===3");
 		cmd2 = cmd2->next;
 	}
+	// ms_errors(lexed);
 	(void)lexed;
 	(void)env;
 	return (0);
