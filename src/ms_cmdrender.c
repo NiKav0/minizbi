@@ -21,9 +21,9 @@ void	ms_rendercmd(char **command, t_env *head)
 	i = 0;
 	while (command[i] != NULL)
 	{
-		printf("commmand [%d] = \'%s\' \n",i,command[i]);
+		// printf("commmand [%d] = \'%s\' \n",i,command[i]);
 		var_name = expanded(command[i]);
-		printf("VAR_NAME: %s\n******************\n", var_name);
+		// printf("VAR_NAME: %s\n******************\n", var_name);
 		while (ft_strchr(command[i], '$') != NULL)
 		{
 			// puts("==============\n\n");
@@ -31,19 +31,19 @@ void	ms_rendercmd(char **command, t_env *head)
 			// printf("\n\n====%s==========\n\n", var_value->value);
 			if (var_value == NULL)
 			{
-				printf("ft_strreplace( \n");
+				// printf("ft_strreplace( \n");
 				command[i] = ft_strreplace(command[i] + 1 , var_name, "");
 				break;
 			}
 			else
 			{
-				printf("ft_strreplace_all \n");
+				// printf("ft_strreplace_all \n");
 				command[i] = ft_strreplace_all(command[i] + 1, var_name, var_value->value);
 				break;
 			}
 			var_name = expanded(command[i]);
 		}
-		printf("%s$",command[i]);
+		// printf("%s$",command[i]);
 		i++;
 	}
 }

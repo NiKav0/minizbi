@@ -36,7 +36,7 @@ char	**ft_arrslice(char **arr, int start, int end)
 
 char	*ft_strreplace(char *src, char *dst, char *replacement)
 {
-	printf("inside ft_strreplace is src = \'%s\' dst = \'%s\' replacement = \'%s\'\n",src, dst , replacement);
+	// printf("inside ft_strreplace is src = \'%s\' dst = \'%s\' replacement = \'%s\'\n",src, dst , replacement);
 
 	char	*ptr;
 
@@ -52,13 +52,13 @@ char	*ft_strreplace(char *src, char *dst, char *replacement)
 	}
 	else
 		ptr = ft_strdup(src);
-	printf("return ptr = %s\n",ptr);
+	// printf("return ptr = %s\n",ptr);
 	return (ptr);
 }
 
 char	*ft_strreplace_all(char *src, char *dst, char *replacement)
 {
-	printf("inside ft_strreplace_all is src = \'%s\' dst = \'%s\' replacement = \'%s\'\n",src, dst , replacement);
+	// printf("inside ft_strreplace_all is src = \'%s\' dst = \'%s\' replacement = \'%s\'\n",src, dst , replacement);
 	char	*ptr;
 	char	*tmp;
 

@@ -38,8 +38,12 @@ t_env	*ms_env_new(char **envp)
 	{
 		env->varname = ft_strldup(envp[i], ft_strchr(envp[i], '=') - envp[i]);
 		env->value = ft_strdup(ft_strchr(envp[i], '=') + 1);
-		env->next = (t_env *)malloc(sizeof(t_env));
-		env = env->next;
+		if (envp[i + 1] != NULL){
+			env->next = (t_env *)malloc(sizeof(t_env));
+			env = env->next;
+		}
+		else
+			env->next = NULL;
 		i++;
 	}
 	return (head);
@@ -51,7 +55,7 @@ t_env	*ms_env_search(char *ptr, t_env *head)
 	{
 		if (ft_strcmp(head->varname, ptr) == 0)
 		{
-			printf("returned %s %s \n", head->varname, head->value);
+			// printf("returned %s %s \n", head->varname, head->value);
 			return (head);
 		}
 		head = head->next;
@@ -62,7 +66,7 @@ t_env	*ms_env_search(char *ptr, t_env *head)
 
 char	*expanded(char *cmd)
 {
-	printf("expanded =>%s",cmd);
+	// printf("expanded =>%s",cmd);
 	int		i;
 	int		k;
 	int		ex_len;
@@ -91,12 +95,12 @@ char	*expanded(char *cmd)
 	}
 	if (k == 0)
 	{
-		printf("return NULL \n");
+		// printf("return NULL \n");
 		return (NULL);
 	}
 	ex_len = k - i;
 	l7asol = malloc(sizeof(char) * (ex_len + 1));
 	ft_strlcpy(l7asol, &cmd[i], ex_len + 1);
-	printf("return %s\n",l7asol);
+	// printf("return %s\n",l7asol);
 	return (l7asol);
 }
