@@ -6,56 +6,12 @@
 /*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 06:38:46 by calmouht          #+#    #+#             */
-/*   Updated: 2024/05/08 22:54:44 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/05/09 23:30:34 by calmouht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-
-void get_redir(t_cmd **cmd)
-{
-	t_cmd *head = *cmd;
-	int i = 0;
-	while(head)
-	{
-		i = 0;
-		while(head->cmd[i])
-		{
-			
-			head->red = malloc(sizeof(e_type));
-			if(!strcmp(head->cmd[i],">") && strcmp(head->cmd[i],">>"))
-			{
-				head->red->file = head->cmd[i + 1];
-				printf("file %s\n",head->red->file);
-				head->red->type = RREDIR;
-			}
-			else if(!strcmp(head->cmd[i],"<") && strcmp(head->cmd[i],"<<"))
-			{
-				head->red->file = head->cmd[i - 1];
-				printf("file %s\n",head->red->file);
-				head->red->type = LREDIR;
-			}
-			else if(!strcmp(head->cmd[i],"<<"))
-			{
-				head->red->file = head->cmd[i - 1];
-				printf("file %s\n",head->red->file);
-				head->red->type = HEREDOC;
-			}
-			else if(!strcmp(head->cmd[i],">>"))
-			{
-				
-				head->red->file = head->cmd[i + 1];
-				printf("file %s\n",head->red->file);
-				head->red->type = APPEND;
-			}
-			i++;
-		}
-		
-		head = head->next;
-	}
-	
-}
 t_cmd	*ms_cmdgen(char **cmd)
 {
 	t_cmd *head = NULL;

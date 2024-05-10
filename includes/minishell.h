@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/10 00:25:16 by calmouht          #+#    #+#             */
+/*   Updated: 2024/05/10 00:25:17 by calmouht         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -21,7 +33,8 @@ typedef enum
 typedef struct t_red
 {
 	e_type type;
-	char *file;
+	char	*file;
+	t_red	*next;
 } t_red;
 
 typedef struct ms_cmd
@@ -44,7 +57,8 @@ typedef struct t_env
 }					t_env;
 
 // function defs
-void	exits(int code);
+void				exits(int code);
+void				get_redir(t_cmd **cmd);
 char				**ms_parse(char *cmd);
 t_env				*ms_env_new(char **envp);
 int					ms_prompt(t_env **env);
