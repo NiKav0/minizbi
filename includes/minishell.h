@@ -6,7 +6,7 @@
 /*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 00:25:16 by calmouht          #+#    #+#             */
-/*   Updated: 2024/05/11 00:10:18 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/05/11 03:10:11 by calmouht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,6 @@ void				ft_env(t_env **env);
 int					ft_unset(t_cmd *cmds, t_env **env);
 void				ft_cd(t_cmd *cmds, t_env **env);
 t_env				*add_node(char *var, char *value);
+void				printlist(t_cmd **head);
 
 #endif

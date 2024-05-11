@@ -6,7 +6,7 @@
 /*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 03:18:08 by calmouht          #+#    #+#             */
-/*   Updated: 2024/05/11 02:16:01 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/05/11 03:22:42 by calmouht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,9 @@ int	ms_prompt(t_env **env)
 	lexed = ms_parse(cmd);
 	
 	ms_rendercmd(lexed, *env);
+	
 	cmd2 = ms_cmdgen(lexed);
+	printlist(&cmd2);
 	exec_cmd(env, cmd2);
 	ms_errors(lexed);
 	return (0);

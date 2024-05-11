@@ -6,7 +6,7 @@
 #    By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/10 00:43:31 by calmouht          #+#    #+#              #
-#    Updated: 2024/05/11 02:37:10 by calmouht         ###   ########.fr        #
+#    Updated: 2024/05/11 03:04:02 by calmouht         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SRC = src/main.c src/ms_parse.c src/ms_env.c src/ms_cmdgen.c src/ms_cmdrender.c 
 		src/ft_env.c src/ft_unset.c src/ft_cd.c src/exits.c src/redirections.c
 INCLUDE = includes/minishell.h
 
-# .SILENT:
+.SILENT:
 build/%.o : src/%.c
 	$(CC) $< $(CFLAGS) -c -o $@
 
