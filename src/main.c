@@ -6,11 +6,26 @@
 /*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 03:18:08 by calmouht          #+#    #+#             */
-/*   Updated: 2024/05/08 23:17:07 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/05/11 02:16:01 by calmouht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int is_tab(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != ' ' && str[i] != '\t')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 
 int	ms_prompt(t_env **env)
 {
@@ -22,10 +37,16 @@ int	ms_prompt(t_env **env)
 	add_history(cmd);
 	if (cmd == NULL)
 		return (2);
+		if (is_tab(cmd) == 1 || ft_strlen(cmd) == 0)
+	{
+		return 0;
+	}
 	lexed = ms_parse(cmd);
+	
 	ms_rendercmd(lexed, *env);
 	cmd2 = ms_cmdgen(lexed);
 	exec_cmd(env, cmd2);
+	ms_errors(lexed);
 	return (0);
 }
 

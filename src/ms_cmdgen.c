@@ -6,7 +6,7 @@
 /*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 06:38:46 by calmouht          #+#    #+#             */
-/*   Updated: 2024/05/09 23:30:34 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/05/11 00:28:49 by calmouht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ t_cmd	*ms_cmdgen(char **cmd)
 		else
 			i++;
 	}
+	// printf("tab %d\n",i);
+	current->count = i;
+	head->red = NULL;
 	get_redir(&head);
 	return head;
 }

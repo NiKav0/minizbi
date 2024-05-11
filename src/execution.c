@@ -137,6 +137,33 @@ char     *cmd_path(char *cmd, t_env *env)
 //     cmds = cmds->next;
 //     }
 // }
+
+void ft_print_cammands(t_cmd *cmd)
+{
+    int i = 0;
+    t_cmd *head = cmd;
+    while(head)
+    {
+        if(head->red)
+        {
+            // printf("has redir ! \n");
+            // printf("redir type %d\n",head->red->type);
+            // printf("%s the file \n",head->red->file);
+        }
+        else 
+            // printf("has no redir ! \n");
+        i = 0;
+        while(head->args[i])
+        {
+            // printf("command = %s\n",head->args[i]);
+            i++;
+        }
+        printf("-------------------------------------------------------\n");
+        head = head->next;
+    }
+
+}
+
 void    exec_cmd(t_env **env, t_cmd *cmds)
 {
     bool    pipe_chain;
@@ -145,7 +172,9 @@ void    exec_cmd(t_env **env, t_cmd *cmds)
     int     pip[2];
     int     save_stdout;
     t_cmd   *curr;
-
+    // write(1,"ssss\n",5);
+    // exit(1);
+    ft_print_cammands(cmds);
     pipe_chain = pipe_chain_present(cmds);
     curr = cmds;
     save_stdout = 0;

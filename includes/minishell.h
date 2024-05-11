@@ -6,7 +6,7 @@
 /*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 00:25:16 by calmouht          #+#    #+#             */
-/*   Updated: 2024/05/10 00:25:17 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/05/11 00:10:18 by calmouht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,19 @@ typedef struct t_red
 {
 	e_type type;
 	char	*file;
-	t_red	*next;
+	struct t_red *next;
 } t_red;
 
 typedef struct ms_cmd
 {
 	t_red 			*red;
-	// char 			**args;
+	char 			**args;
 	char			**cmd;
 	e_type			input;
 	char			*infile;
 	e_type			output;
 	char			*outfile;
+	int				count;
 	struct ms_cmd	*next;
 }					t_cmd;
 
