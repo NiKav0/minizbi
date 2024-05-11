@@ -6,7 +6,7 @@
 /*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 23:28:51 by calmouht          #+#    #+#             */
-/*   Updated: 2024/05/11 03:23:02 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/05/11 04:50:36 by calmouht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,61 @@ void get_new_args(t_cmd **cmd)
 	}
 }
 
+int is_special(char *tab)
+{
+	if (ms_ctrlop(tab) == RREDIR  || ms_ctrlop(tab) == LREDIR || ms_ctrlop(tab) == PIPE|| ms_ctrlop(tab) == HEREDOC || ms_ctrlop(tab) == APPEND)
+	{
+		return 1;
+		/* code */
+	}
+	
+	return 0;
+}
+
+void check_errors(char ** tab)
+{
+	int i = 0;
+	while (tab[i])
+	{
+		/* code */
+	if (ms_ctrlop(tab[i+1])!= NONE)
+			{
+			// 	puts(tab[i]);
+			// printf("%d %s\n", i ,tab[i] );
+			if (is_special(tab[i]) && is_special(tab[i+1]) )
+			{
+				// exit(0);
+				exits(2);
+				
+			}
+			
+			// if (ms_ctrlop(tab[i]) == RREDIR && ((ms_ctrlop(tab[i + 1]) != RREDIR
+			// 		|| ms_ctrlop(tab[i + 1]) == RREDIR)))
+			// 	exits(2);
+			// if (ms_ctrlop(tab[i]) == LREDIR && (ms_ctrlop(tab[i + 1]) != LREDIR
+			// 	|| ms_ctrlop(tab[i + 1]) == LREDIR))
+			// 	exits(2);
+			// if (ms_ctrlop(tab[i]) == PIPE && (ms_ctrlop(tab[i + 1]) != PIPE
+			// 	|| ms_ctrlop(tab[i + 1]) == PIPE))
+			// 	exits(2);
+			// if (ms_ctrlop(tab[i]) == HEREDOC && (ms_ctrlop(tab[i + 1]) != HEREDOC
+			// 	|| ms_ctrlop(tab[i + 1]) == HEREDOC))
+			// 	exits(2);
+			// if (ms_ctrlop(tab[i]) == APPEND && (ms_ctrlop(tab[i + 1]) != APPEND
+			// 	|| ms_ctrlop(tab[i + 1]) == APPEND))
+			// 	exits(2);
+			}
+		i++;
+	}
+	
+}
+
 void printlist(t_cmd **head)
 {
 	t_cmd *curr;
 	curr = *head;
 	int i = 0;
+	printf("count = %d\n ", curr->count);
 	while (curr)
 	{
 		while (i < curr->count)
@@ -86,8 +136,8 @@ void printlist(t_cmd **head)
 			
 			// if (ms_ctrlop(curr->cmd[i+1])!= NONE)
 			// {
-				puts(curr->cmd[i]);
-			// printf("%d %s\n", i ,curr->cmd[i] );
+				// puts(curr->cmd[i]);
+			printf("%d %s\n", i ,curr->cmd[i] );
 			
 			// if (ms_ctrlop(curr->cmd[i]) == RREDIR && ((ms_ctrlop(curr->cmd[i + 1]) != RREDIR
 			// 		|| ms_ctrlop(curr->cmd[i + 1]) == RREDIR)))
@@ -124,13 +174,13 @@ void get_redir(t_cmd **cmd)
 		while(head->cmd[i])
 		{
 			// head->red = NULL;
-			
-			if ((!strcmp((head)->cmd[i],">") || !strcmp((head)->cmd[i],"<") ) && head->count == 1)
+						if ((!strcmp((head)->cmd[i],"|") || !strcmp((head)->cmd[i],">")|| !strcmp((head)->cmd[i],">>")|| !strcmp((head)->cmd[i],"<")|| !strcmp((head)->cmd[i],"<<")) && head->count == 1)
 			{
 				printf("idkfih\n");
 				exit(1);
 				/* code */
 			}
+			
 			// printf("%d %d\n", head->count , i);
 			if ((!strcmp((head)->cmd[i],">") || !strcmp((head)->cmd[i],"<") ) && !(head)->cmd[i+1])
 			{

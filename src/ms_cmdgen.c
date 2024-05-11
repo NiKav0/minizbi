@@ -6,11 +6,24 @@
 /*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 06:38:46 by calmouht          #+#    #+#             */
-/*   Updated: 2024/05/11 03:25:45 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/05/11 04:24:29 by calmouht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void printtab(char ** tab)
+{
+	int i =0 ;
+	while (tab[i])
+	{
+		printf(":%s:\n", tab[i]);
+		i++;
+		/* code */
+	}
+	
+}
+
 
 t_cmd	*ms_cmdgen(char **cmd)
 {
@@ -25,9 +38,10 @@ t_cmd	*ms_cmdgen(char **cmd)
 		if (ms_ctrlop(cmd[i]) == PIPE || cmd[i + 1] == NULL)
 		{
 			// printf("check: %d   i: %d\n",checkpoint, i + 1);
-				puts(cmd[i]);
+				// puts(cmd[i]);
 			if (cmd[i + 1] == NULL) {
 				current->cmd = ft_arrslice(cmd, checkpoint, i + 1);
+				// printtab(current->cmd);
 			}
 			else 
 				current->cmd = ft_arrslice(cmd, checkpoint, i);
@@ -42,9 +56,14 @@ t_cmd	*ms_cmdgen(char **cmd)
 					current = current->next;
 			}
 			i = checkpoint;
+				// puts(current->cmd[i]);
+
+			// current->cmd[i] = ft_strdup("|");
+			// ft_strdup()
 		}
 		else{
 		// printf("hhh %s hhh\n", cmd[i]);
+		
 			i++;
 		}
 		// printf("ggg %s ggg\n", cmd[i]);
