@@ -1,224 +1,113 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alakhida <alakhida@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/05 07:15:59 by alakhida          #+#    #+#             */
+/*   Updated: 2024/05/18 02:29:49 by alakhida         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-bool    cmd_is_builtin(char *string)
+bool	cmd_is_builtin(char *string)
 {
-    if (!ft_strcmp(string, "cd") || !ft_strcmp(string, "echo")
-        || !ft_strcmp(string, "env") || !ft_strcmp(string, "unset")
-        || !ft_strcmp(string, "export") || !ft_strcmp(string, "pwd")
-        || !ft_strcmp(string, "exit"))
-        return (true);
-    else
-        return (false);
+	if (!ft_strcmp(string, "cd") || !ft_strcmp(string, "echo")
+		|| !ft_strcmp(string, "env") || !ft_strcmp(string, "unset")
+		|| !ft_strcmp(string, "export") || !ft_strcmp(string, "pwd")
+		|| !ft_strcmp(string, "exit"))
+		return (true);
+	return (false);
 }
 
-bool    pipe_chain_present(t_cmd *cmds)
+char	*cmd_path(char *cmd, t_env *env)
 {
-    int i;
+	t_env	*curr;
+	char	*path;
+	char	*dir;
+	char	*cmdpath;
 
-    i = 0;
-    while (cmds)
-    {
-        i++;
-        cmds = cmds->next;
-    }
-    if (i == 1)
-        return (false);
-    else
-        return (true);
+	curr = env;
+	if (!curr)
+		return (NULL);
+	path = get_cmd_path(curr);
+	dir = ft_strtok(path, ":");
+	while (dir != NULL)
+	{
+		cmdpath = copy_path(dir, cmd);
+		if (access(cmdpath, X_OK) == 0)
+		{
+			free(path);
+			path = cmdpath;
+			free(cmdpath);
+			break ;
+		}
+		free(cmdpath);
+		dir = ft_strtok(NULL, ":");
+	}
+	return (path);
 }
 
-int    count_pipes(t_cmd *cmds)
+void	handle_heredoc(t_cmd *cmds)
 {
-    int i;
+	t_red	*curr;
 
-    i = 0;
-    while (cmds)
-    {
-        i++;
-        cmds = cmds->next;
-    }
-    return (i);
+	while (cmds)
+	{
+		cmds->heredoc = 0;
+		if (cmds->red)
+		{
+			curr = cmds->red;
+			while (curr)
+			{
+				if (curr->type == HEREDOC)
+				{
+					if (cmds->heredoc)
+						close(cmds->heredoc);
+					cmds->heredoc = handle_here_doc(curr);
+				}
+				curr = curr->next;
+			}
+		}
+		cmds = cmds->next;
+	}
 }
 
-char  *ft_strtok(char *str, const char *delim)
+void	free_info(t_info *info)
 {
-    static char *s = NULL;
-    char *ret;
-    int i;
-
-    if (str)
-        s = str;
-    if (!s)
-        return (NULL);
-    i = 0;
-    while (s[i])
-    {
-        if (ft_strchr(delim, s[i]))
-        {
-            s[i] = '\0';
-            ret = s;
-            s = s + i + 1;
-            return (ret);
-        }
-        i++;
-    }
-    ret = s;
-    s = NULL;
-    return (ret);
+	if (info->envp)
+		free_dbl_ptr(info->envp);
+	if (info->path)
+		free(info->path);
+	free(info);
 }
 
-char     *cmd_path(char *cmd, t_env *env)
+void	exec_cmd(t_env **env, t_cmd *cmds, int *exit_status)
 {
-    t_env  *curr; 
-    char    *path;
-    char    *dir;
+	t_info	*info;
 
-    curr = env;
-    if (!curr)
-        return (NULL);
-    while (curr)
-    {
-        if (ft_strcmp(curr->varname, "PATH") == 0)
-            break;
-        curr = curr->next;
-    }
-    path = ft_strdup(curr->value);
-    dir = ft_strtok(path, ":");
-     while (dir != NULL)
-     {
-   
-        char *cmdpath = malloc(ft_strlen(dir) + ft_strlen(cmd) + 2);
-        if (!cmdpath)
-        {
-            perror("malloc");
-            exit(EXIT_FAILURE);
-        }
-        strcpy(cmdpath, dir);
-        strcat(cmdpath, "/");
-        strcat(cmdpath, cmd);
-        if (access(cmdpath, X_OK) == 0)
-        {
-            free (path);
-            path = cmdpath;
-            free (cmdpath);
-            break;
-        }
-        free(cmdpath);
-        dir = ft_strtok(NULL, ":");
-    }
-    return path;
-}
-
-// void	exec_pipes(t_cmd *cmds)
-// {
-// 	int		pip[2];
-// 	// pid_t	child;
-
-// 			puts("hh");
-//     while (cmds)
-//     {
-// 		// child = fork();
-//     	pipe(pip);
-// 		// if (child == 0)
-// 		// {
-// 			close(pip[1]);
-// 			if (dup2(pip[0], STDIN_FILENO) < 0)
-// 			{
-// 				printf("couldn't get input\n");
-// 				return ;
-// 			}
-//     // close (pip[1]);
-// 	// dup2(pip[1], STDOUT_FILENO);
-//    		// }
-// 	// close(pip[1]);
-//     //    if (cmds->next != NULL)
-//     //         dup2(pip[1], STDOUT_FILENO);
-//     // close(pip[0]);
-//     cmds = cmds->next;
-//     }
-// }
-
-void ft_print_cammands(t_cmd *cmd)
-{
-    int i = 0;
-    t_cmd *head = cmd;
-    while(head)
-    {
-        if(head->red)
-        {
-            // printf("has redir ! \n");
-            // printf("redir type %d\n",head->red->type);
-            // printf("%s the file \n",head->red->file);
-        }
-        else 
-            // printf("has no redir ! \n");
-        i = 0;
-        while(head->args[i])
-        {
-            // printf("command = %s\n",head->args[i]);
-            i++;
-        }
-        printf("-------------------------------------------------------\n");
-        head = head->next;
-    }
-
-}
-
-void    exec_cmd(t_env **env, t_cmd *cmds)
-{
-    bool    pipe_chain;
-    char    *path;
-    pid_t   child;
-    int     pip[2];
-    int     save_stdout;
-    t_cmd   *curr;
-    // write(1,"ssss\n",5);
-    // exit(1);
-    ft_print_cammands(cmds);
-    pipe_chain = pipe_chain_present(cmds);
-    curr = cmds;
-    save_stdout = 0;
-     while (cmds)
-    {
-        path = cmd_path(cmds->cmd[0], *env);
-        if (path == NULL)
-        {
-            printf("Command not found: %s\n", cmds->cmd[0]);
-            cmds = cmds->next;
-            continue;
-        }
-        if (cmd_is_builtin(cmds->cmd[0]) && !pipe_chain)
-            exec_built_in(cmds, env);
-        else
-        {
-            if (pipe_chain && cmds->next)
-                pipe(pip);
-            child = fork();
-            if (child == -1)
-                exit(EXIT_FAILURE);
-            if (child == 0)
-            {
-                if (pipe_chain && cmds->next)
-                {
-                    close(pip[0]);
-                    dup2(pip[1], STDOUT_FILENO);
-                    close(pip[1]);
-                }
-                if (save_stdout)
-                {
-                    dup2(save_stdout, STDIN_FILENO);
-                    close(save_stdout);
-                }
-                if (execve(path, cmds->cmd, NULL) == -1)
-                    exit(EXIT_FAILURE);
-            }
-            if (pipe_chain && cmds->next)
-            {
-                close(pip[1]);
-                save_stdout = pip[0];
-            }
-        }
-        cmds = cmds->next;
-    }
-    while (wait(&child) > 0);
+	info = (t_info *)malloc(sizeof(t_info));
+	info->pipe_chain = pipe_chain_present(cmds);
+	info->saved_stdout = dup(STDOUT_FILENO);
+	info->saved_stdin = dup(STDIN_FILENO);
+	info->ex_status = exit_status;
+	info->child = 0;
+	info->path = NULL;
+	handle_heredoc(cmds);
+	info->envp = ms_env_dup(*env);
+	while (cmds)
+	{
+		if (cmd_is_builtin(cmds->cmd[0]) && !info->pipe_chain)
+			*(info->ex_status) = exec_built_in(cmds, env);
+		else
+			exec_bin(cmds, info, env);
+		cmds = cmds->next;
+	}
+	dup2(info->saved_stdout, STDOUT_FILENO);
+	dup2(info->saved_stdin, STDIN_FILENO);
+	if (info->child)
+		wait_child(&info->child, info);
+	free_info(info);
 }

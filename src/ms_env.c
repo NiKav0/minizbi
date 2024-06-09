@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alakhida <alakhida@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 03:18:15 by calmouht          #+#    #+#             */
-/*   Updated: 2024/04/16 15:33:41 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/05/18 04:26:06 by alakhida         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ t_env	*ms_env_new(char **envp)
 	{
 		env->varname = ft_strldup(envp[i], ft_strchr(envp[i], '=') - envp[i]);
 		env->value = ft_strdup(ft_strchr(envp[i], '=') + 1);
-		if (envp[i + 1] != NULL){
+		if (envp[i + 1] != NULL)
+		{
 			env->next = (t_env *)malloc(sizeof(t_env));
 			env = env->next;
 		}
@@ -46,6 +47,9 @@ t_env	*ms_env_new(char **envp)
 			env->next = NULL;
 		i++;
 	}
+	env->next = (t_env *)malloc(sizeof(t_env));
+	env->next->varname = ft_strdup("?");
+	env->next->value = ft_itoa(0);
 	return (head);
 }
 
@@ -55,52 +59,54 @@ t_env	*ms_env_search(char *ptr, t_env *head)
 	{
 		if (ft_strcmp(head->varname, ptr) == 0)
 		{
-			// printf("returned %s %s \n", head->varname, head->value);
 			return (head);
 		}
 		head = head->next;
 	}
-	printf("return NULL\n");
-	return(NULL);
+	return (NULL);
 }
 
-char	*expanded(char *cmd)
+int	express(char *cmd, int *i, int *k)
 {
-	// printf("expanded =>%s",cmd);
+	if (cmd[*i] && cmd[*i] == '$' && cmd[(*i) + 1] == '?')
+	{
+		*k = 2;
+		return (1);
+	}
+	if (cmd[*i] && cmd[(*i)] == '$')
+	{
+		(*i)++;
+		*k = *i;
+		while (cmd[*k] && (ft_isalnum(cmd[(*k)]) || ft_strchr("_?=",
+					cmd[(*k)]) != NULL))
+			(*k)++;
+		return (1);
+	}
+	return (0);
+}
+
+char	*expanded(char *cmd, int *exit_status)
+{
 	int		i;
 	int		k;
 	int		ex_len;
 	char	*l7asol;
 
-	i = 0;
+	i = -1;
 	k = 0;
-	while ((cmd[i]))
+	while ((cmd[++i]))
 	{
-		if (cmd[i] == '$')
-		{
-			i++;
-			k = i;
-			while (ft_isalnum(cmd[k]) || cmd[k] == '_' || cmd[k] == '?'
-				|| cmd[k] == '=')
-				k++;
+		if (cmd[i] == '$' && is_special(&cmd[i + 1]))
+			return (NULL);
+		if (express(cmd, &i, &k) == 1)
 			break ;
-		}
-		if (cmd[i] == '\'')
-		{
-			i++;
-			while (cmd[i] != '\'')
-				i++;
-		}
-		i++;
 	}
 	if (k == 0)
-	{
-		// printf("return NULL \n");
 		return (NULL);
-	}
+	else if (k == 2)
+		return (ft_strdup("?"));
 	ex_len = k - i;
 	l7asol = malloc(sizeof(char) * (ex_len + 1));
 	ft_strlcpy(l7asol, &cmd[i], ex_len + 1);
-	// printf("return %s\n",l7asol);
 	return (l7asol);
 }

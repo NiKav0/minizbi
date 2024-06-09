@@ -3,230 +3,112 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alakhida <alakhida@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 23:28:51 by calmouht          #+#    #+#             */
-/*   Updated: 2024/05/11 04:50:36 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/05/18 02:48:15 by alakhida         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int t_strlen(char **str)
+static void	arg_norm(t_cmd *cmd, char *tmp)
 {
-	int i = 0;
-	int size = 0;
-	while(str[i])
+	t_cmd	*head;
+	int		i;
+
+	head = cmd;
+	i = 0;
+	while (head->cmd && head->cmd[i])
 	{
-		size += ft_strlen(str[i]);
+		if (head->cmd[i] && (is_special(head->cmd[i]) == 1))
+		{
+			tmp = head->cmd[i];
+			head->cmd[i] = NULL;
+			head->args = tarray_copy(head->cmd);
+			head->cmd[i] = tmp;
+			return ;
+		}
 		i++;
 	}
-	return size;
-
 }
-char **tarray_copy(char **a)
+
+void	get_new_args(t_cmd **cmd)
 {
-	char **cpy = malloc(sizeof(char *) * t_strlen(a));
-	int i = 0;
-	while(a[i])
+	t_cmd	*head;
+	char	*tmp;
+	int		i;
+
+	head = *cmd;
+	tmp = NULL;
+	i = 0;
+	while (head)
 	{
-		cpy[i] = ft_strdup(a[i]);
-		i++;
+		head->args = NULL;
+		if (head->red)
+			arg_norm(head, tmp);
+		else
+			head->args = tarray_copy(head->cmd);
+		if (head->cmd)
+			free_dbl_ptr(head->cmd);
+		head->cmd = head->args;
+		head = head->next;
 	}
-	cpy[i] = NULL;
-	return cpy;
 }
 
-void get_new_args(t_cmd **cmd)
+void	add_node_back(t_red **red, t_red *new, char *file, t_type type)
 {
-	t_cmd *head = *cmd;
-	char *tmp = NULL;
-	int i = 0;
-	while(head)
+	t_red	*current;
+
+	current = *red;
+	while (current->next != NULL)
 	{
-		if(head->red)
-		{ 
-			while(head->cmd && head->cmd[i])
-			{
-				if(head->cmd[i] && (!strcmp(head->cmd[i],">>") || !strcmp(head->cmd[i],">") || !strcmp(head->cmd[i],"<<") || !strcmp(head->cmd[i],"<")))
-				{
-					tmp = head->cmd[i];
-					head->cmd[i] = NULL;
-					head->args = tarray_copy(head->cmd);
-					head->cmd[i] = tmp; 
-					break;
-				}
-				i++;
-			}
-			// printf("has a red inside code pass \n");
+		current = current->next;
+	}
+	current->next = new;
+	current->next->file = file;
+	current->next->type = type;
+	current->next->next = NULL;
+}
+
+void	get_redir(t_cmd **cmd)
+{
+	t_cmd	*head;
+	int		i;
+
+	head = *cmd;
+	i = 0;
+	while (head)
+	{
+		i = 0;
+		head->red = NULL;
+		arg_norm2(head);
+		head = head->next;
+	}
+	get_new_args(cmd);
+}
+
+void	arg_norm2(t_cmd *cmd)
+{
+	t_cmd	*head;
+	int		i;
+
+	head = cmd;
+	i = 0;
+	while (head->cmd[i] != NULL)
+	{
+		if (ms_ctrlop(head->cmd[i]) != NONE
+			&& ms_ctrlop(head->cmd[i]) != PIPE)
+		{
+			if (arg_norm_error(head, i) == 1)
+				return ;
+			else if (arg_norm_error2(head, i) == 1)
+				return ;
+			else
+				arg_norm_error3(head, i);
+			i += 2;
 		}
 		else
-		{
-			// printf("else \n");
-			head->args = tarray_copy(head->cmd);
-		}
-		// fe had ster gha bdelt cmd b args bash n testy makhnach nkhdmo hka khask tsift args l serghini o tfreeeyi **cmd o **args
-		
-		head->cmd = head->args;
-		// printf("pass first head \n");
-		head = head->next;
-	}
-}
-
-int is_special(char *tab)
-{
-	if (ms_ctrlop(tab) == RREDIR  || ms_ctrlop(tab) == LREDIR || ms_ctrlop(tab) == PIPE|| ms_ctrlop(tab) == HEREDOC || ms_ctrlop(tab) == APPEND)
-	{
-		return 1;
-		/* code */
-	}
-	
-	return 0;
-}
-
-void check_errors(char ** tab)
-{
-	int i = 0;
-	while (tab[i])
-	{
-		/* code */
-	if (ms_ctrlop(tab[i+1])!= NONE)
-			{
-			// 	puts(tab[i]);
-			// printf("%d %s\n", i ,tab[i] );
-			if (is_special(tab[i]) && is_special(tab[i+1]) )
-			{
-				// exit(0);
-				exits(2);
-				
-			}
-			
-			// if (ms_ctrlop(tab[i]) == RREDIR && ((ms_ctrlop(tab[i + 1]) != RREDIR
-			// 		|| ms_ctrlop(tab[i + 1]) == RREDIR)))
-			// 	exits(2);
-			// if (ms_ctrlop(tab[i]) == LREDIR && (ms_ctrlop(tab[i + 1]) != LREDIR
-			// 	|| ms_ctrlop(tab[i + 1]) == LREDIR))
-			// 	exits(2);
-			// if (ms_ctrlop(tab[i]) == PIPE && (ms_ctrlop(tab[i + 1]) != PIPE
-			// 	|| ms_ctrlop(tab[i + 1]) == PIPE))
-			// 	exits(2);
-			// if (ms_ctrlop(tab[i]) == HEREDOC && (ms_ctrlop(tab[i + 1]) != HEREDOC
-			// 	|| ms_ctrlop(tab[i + 1]) == HEREDOC))
-			// 	exits(2);
-			// if (ms_ctrlop(tab[i]) == APPEND && (ms_ctrlop(tab[i + 1]) != APPEND
-			// 	|| ms_ctrlop(tab[i + 1]) == APPEND))
-			// 	exits(2);
-			}
-		i++;
-	}
-	
-}
-
-void printlist(t_cmd **head)
-{
-	t_cmd *curr;
-	curr = *head;
-	int i = 0;
-	printf("count = %d\n ", curr->count);
-	while (curr)
-	{
-		while (i < curr->count)
-		{
-			// printf("%d %s\n", i ,curr->cmd[i] );
-			
-			// if (ms_ctrlop(curr->cmd[i+1])!= NONE)
-			// {
-				// puts(curr->cmd[i]);
-			printf("%d %s\n", i ,curr->cmd[i] );
-			
-			// if (ms_ctrlop(curr->cmd[i]) == RREDIR && ((ms_ctrlop(curr->cmd[i + 1]) != RREDIR
-			// 		|| ms_ctrlop(curr->cmd[i + 1]) == RREDIR)))
-			// 	exits(2);
-			// if (ms_ctrlop(curr->cmd[i]) == LREDIR && (ms_ctrlop(curr->cmd[i + 1]) != LREDIR
-			// 	|| ms_ctrlop(curr->cmd[i + 1]) == LREDIR))
-			// 	exits(2);
-			// if (ms_ctrlop(curr->cmd[i]) == PIPE && (ms_ctrlop(curr->cmd[i + 1]) != PIPE
-			// 	|| ms_ctrlop(curr->cmd[i + 1]) == PIPE))
-			// 	exits(2);
-			// if (ms_ctrlop(curr->cmd[i]) == HEREDOC && (ms_ctrlop(curr->cmd[i + 1]) != HEREDOC
-			// 	|| ms_ctrlop(curr->cmd[i + 1]) == HEREDOC))
-			// 	exits(2);
-			// if (ms_ctrlop(curr->cmd[i]) == APPEND && (ms_ctrlop(curr->cmd[i + 1]) != APPEND
-			// 	|| ms_ctrlop(curr->cmd[i + 1]) == APPEND))
-			// 	exits(2);
-			// }
 			i++;
-		}
-		i = 0;
-		curr = curr->next;
 	}
-}
-
-void get_redir(t_cmd **cmd)
-{
-	// printf("get redir\n");
-	t_cmd *head = *cmd;
-	// printlist(cmd);
-	int i = 0;
-	while(head)
-	{
-		i = 0;
-		while(head->cmd[i])
-		{
-			// head->red = NULL;
-						if ((!strcmp((head)->cmd[i],"|") || !strcmp((head)->cmd[i],">")|| !strcmp((head)->cmd[i],">>")|| !strcmp((head)->cmd[i],"<")|| !strcmp((head)->cmd[i],"<<")) && head->count == 1)
-			{
-				printf("idkfih\n");
-				exit(1);
-				/* code */
-			}
-			
-			// printf("%d %d\n", head->count , i);
-			if ((!strcmp((head)->cmd[i],">") || !strcmp((head)->cmd[i],"<") ) && !(head)->cmd[i+1])
-			{
-				printf("tabnk\n");
-				exit(1);
-
-				/* code */
-			}
-			
-			if(!strcmp((head)->cmd[i],">") && strcmp(head->cmd[i],">>"))
-				{	
-					head->red = malloc(sizeof(t_red));
-					head->red->file = ft_strdup(head->cmd[i + 1]);
-					head->red->type = RREDIR;
-					head->red->next  = NULL;
-				}
-			else if(!strcmp(head->cmd[i],"<") && strcmp(head->cmd[i],"<<"))
-				{
-					head->red = malloc(sizeof(t_red));
-					head->red->file = ft_strdup(head->cmd[i + 1]);
-					// printf("file %s\n",head->red->file);
-					head->red->type = LREDIR;
-					head->red->next  = NULL;
-				}
-
-			else if(!strcmp(head->cmd[i],"<<"))
-				{
-					head->red = malloc(sizeof(t_red));
-					head->red->file = ft_strdup(head->cmd[i + 1]);
-					// printf("file %s\n",head->red->file);
-					head->red->type = HEREDOC;
-					head->red->next  = NULL;
-				}
-			else if(!strcmp(head->cmd[i],">>"))
-				{
-					head->red = malloc(sizeof(t_red));
-					head->red->file = ft_strdup(head->cmd[i + 1]);
-					// printf("file %s\n",head->red->file);
-					head->red->type = APPEND;
-					head->red->next  = NULL;
-				}
-			i++;
-		}
-		head = head->next;
-	}
-	// printf("passed the fisrt pasrt \n");
-	get_new_args(cmd);
-	
 }

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alakhida <alakhida@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/05 07:15:50 by alakhida          #+#    #+#             */
+/*   Updated: 2024/05/18 02:08:28 by alakhida         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-char *env_search(char *ptr, t_env *head)
+char	*env_search(char *ptr, t_env *head)
 {
 	while (head)
 	{
@@ -13,21 +25,21 @@ char *env_search(char *ptr, t_env *head)
 
 void	update_pwd(t_env **env, char *var, char *value)
 {
-	t_env *curr;
-	
+	t_env	*curr;
+
 	curr = *env;
 	while (curr)
 	{
 		if (!ft_strcmp(curr->varname, var))
 		{
-			free (curr->value);
+			free(curr->value);
 			curr->value = ft_strdup(value);
-			break;
+			break ;
 		}
 		if (curr->next == NULL)
 		{
 			curr->next = add_node("OLDPWD", value);
-			break;
+			break ;
 		}
 		curr = curr->next;
 	}
@@ -37,29 +49,38 @@ int	check_home(t_env *home)
 {
 	if (chdir(env_search("HOME", home)) != 0)
 	{
-		printf("cd: HOME not set\n");
+		ft_putendl_fd("bash : cd : HOME not set", 2);
 		return (0);
 	}
 	return (1);
 }
 
-void	change_dir(char *cmd, t_env **env, char *pwd, char *oldpwd)
+int	change_dir(char *cmd, t_env **env, char *pwd, char *oldpwd)
 {
 	if (access(cmd, F_OK) != 0)
 	{
-		printf("%s : no such file or directory\n", cmd);
-		return ;
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd("no such file or directory", 2);
+		return (1);
 	}
 	else
 	{
-		chdir(cmd);
+		if (chdir(cmd) != 0)
+		{
+			ft_putendl_fd("permission denied", 2);
+			return (1);
+		}
 		pwd = getcwd(NULL, 0);
+		if (!pwd)
+			return (perror("getcwd: "), 1);
 		update_pwd(env, "PWD", pwd);
 		update_pwd(env, "OLDPWD", oldpwd);
-	}	
+		free(pwd);
+	}
+	return (0);
 }
 
-void    ft_cd(t_cmd *cmds, t_env **env)
+int	ft_cd(t_cmd *cmds, t_env **env)
 {
 	t_env	*current;
 	char	*oldpwd;
@@ -68,15 +89,19 @@ void    ft_cd(t_cmd *cmds, t_env **env)
 	current = *env;
 	pwd = NULL;
 	oldpwd = getcwd(NULL, 0);
-    if (cmds->cmd[1] == NULL)
+	if (!oldpwd)
+		return (perror("getcwd: "), 1);
+	if (cmds->cmd[1] == NULL)
 	{
 		if (check_home(current) == 1)
 		{
-		update_pwd(env, "OLDPWD", oldpwd);
-	    pwd = env_search("HOME", current);
-		update_pwd(env, "PWD", pwd);
+			update_pwd(env, "OLDPWD", oldpwd);
+			pwd = env_search("HOME", current);
+			update_pwd(env, "PWD", pwd);
 		}
 	}
 	else if (cmds->cmd[1])
-    	change_dir(cmds->cmd[1], env, pwd, oldpwd);
+		if (change_dir(cmds->cmd[1], env, pwd, oldpwd))
+			return (free(oldpwd), 1);
+	return (free(oldpwd), 0);
 }

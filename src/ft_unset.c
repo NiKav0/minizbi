@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alakhida <alakhida@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/05 07:16:16 by alakhida          #+#    #+#             */
+/*   Updated: 2024/05/17 08:36:03 by alakhida         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-void    ft_unset_norm(t_cmd *cmds, t_env *curr)
+void	ft_unset_norm(t_cmd *cmds, t_env *curr)
 {
-    t_env *tmp;
-    int     i;
+	t_env	*tmp;
+	int		i;
 
-    i = 1;
-    while (curr->next)
+	i = 1;
+	while (curr->next)
 	{
 		if (!ft_strcmp(cmds->cmd[i], curr->next->varname))
 		{
@@ -18,30 +30,33 @@ void    ft_unset_norm(t_cmd *cmds, t_env *curr)
 			else
 				curr->next = NULL;
 			free(tmp);
-			break;
+			break ;
 		}
 		curr = curr->next;
 	}
 }
 
-int		ft_unset(t_cmd *cmds, t_env **env)
+int	ft_unset(t_cmd *cmds, t_env **env)
 {
-	t_env *curr;
+	t_env	*curr;
 	int		i;
 
 	i = 1;
 	curr = *env;
 	while (cmds->cmd[i])
 	{
-		if (!ft_strcmp(cmds->cmd[i], curr->varname))
+		if (ft_strcmp(cmds->cmd[i], "?"))
 		{
-			free(curr->value);
-			free(curr->varname);
-			*env = curr->next;
-			free(curr);
+			if (!ft_strcmp(cmds->cmd[i], curr->varname))
+			{
+				free(curr->value);
+				free(curr->varname);
+				*env = curr->next;
+				free(curr);
+			}
+			else
+				ft_unset_norm(cmds, curr);
 		}
-		else
-			ft_unset_norm(cmds, curr);
 		i++;
 		curr = *env;
 	}

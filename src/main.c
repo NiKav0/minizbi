@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: calmouht <calmouht@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alakhida <alakhida@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 03:18:08 by calmouht          #+#    #+#             */
-/*   Updated: 2024/05/11 04:27:27 by calmouht         ###   ########.fr       */
+/*   Updated: 2024/05/18 03:31:59 by alakhida         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int is_tab(char *str)
+int	is_tab(char *str)
 {
 	int	i;
 
@@ -26,47 +26,81 @@ int is_tab(char *str)
 	return (1);
 }
 
-int	ms_prompt(t_env **env)
+void	free_cmd(char **av)
 {
-	char	*cmd;
-	char	**lexed;
-	t_cmd	*cmd2;
+	char	**temp;
 
-	cmd = readline("$> ");
-	add_history(cmd);
-	if (cmd == NULL)
-		return (2);
-		if (is_tab(cmd) == 1 || ft_strlen(cmd) == 0)
+	temp = av;
+	while (*av)
 	{
-		return 0;
+		free(*av);
+		av++;
 	}
-	lexed = ms_parse(cmd);
-	
-	ms_rendercmd(lexed, *env);
-	printtab(lexed);
-	check_errors(lexed);
-	cmd2 = ms_cmdgen(lexed);
-	// printlist(&cmd2);
-	exec_cmd(env, cmd2);
-	ms_errors(lexed);
+	av = temp;
+	free(av);
+}
+
+int	sear(t_cmd **hh)
+{
+	t_cmd	*curr;
+
+	curr = *hh;
+	while (curr)
+	{
+		if (curr->flag == 1)
+			return (1);
+		curr = curr->next;
+	}
 	return (0);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	ms_prompt(t_env **env, int *exit_status)
 {
-	int		cmd_status;
-	t_env	*env;
+	char	*cmd;
+	char	**lexed;
+	char	**tmp;
+	t_cmd	*cmd2;
+	t_norm	index;
 
-	(void)argv;
-	(void)argc;
+	cmd = readline("M0NG14L170_6-9$: ");
+	if (cmd == NULL)
+		return (2);
+	add_history(cmd);
+	if ((is_tab(cmd) == 1 || ft_strlen(cmd) < 1) || pre_syntax_check(cmd) != 0)
+		return (free(cmd), 0);
+	lexed = ms_parse(cmd);
+	if (check_errors(lexed) == 1)
+		return (free_dbl_ptr(lexed), free(cmd), 0);
+	ms_rendercmd(lexed, *env, exit_status, &index);
+	lexed = fix_args(lexed);
+	if (lexed == NULL)
+		return (free(cmd), 0);
+	cmd2 = ms_cmdgen(lexed);
+	if (sear(&cmd2) == 1)
+		return (free(cmd), free_dbl_ptr(lexed), free_all(cmd2), 0);
+	exec_cmd(env, cmd2, exit_status);
+	return (free(cmd), free_dbl_ptr(lexed), free_all(cmd2), 0);
+}
+
+int	main(int __unused argc, char __unused **argv, char **envp)
+{
+	int					cmd_status;
+	int					exit_status;
+	t_env				*env;
+
+	signal(SIGINT, sig);
+	signal(SIGQUIT, SIG_IGN);
 	if (envp == NULL)
 		return (EXIT_FAILURE);
 	env = ms_env_new(envp);
 	while (true)
 	{
-		cmd_status = ms_prompt(&env);
+		g_signal_number = 0;
+		cmd_status = ms_prompt(&env, &exit_status);
 		if (cmd_status != 0)
 			return (cmd_status);
-		// system("leaks minishell");
+		if (g_signal_number)
+			exit_status = g_signal_number + 128;
+		update_exit(&env, exit_status);
 	}
 }

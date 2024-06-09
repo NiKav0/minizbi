@@ -1,7 +1,18 @@
-#include "../includes/minishell.h"
-#include <stdio.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utility.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alakhida <alakhida@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 09:38:43 by alakhida          #+#    #+#             */
+/*   Updated: 2024/05/18 02:42:54 by alakhida         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-e_type	ms_ctrlop(char *str)
+#include "../includes/minishell.h"
+
+t_type	ms_ctrlop(char *str)
 {
 	if (ft_strcmp(str, "<<") == 0)
 		return (HEREDOC);
@@ -36,53 +47,46 @@ char	**ft_arrslice(char **arr, int start, int end)
 
 char	*ft_strreplace(char *src, char *dst, char *replacement)
 {
-	// printf("inside ft_strreplace is src = \'%s\' dst = \'%s\' replacement = \'%s\'\n",src, dst , replacement);
-
 	char	*ptr;
 
-	if (strstr(src, dst))
+	if (ft_strstr(src, dst))
 	{
 		ptr = malloc(sizeof(char) * (ft_strlen(src) - ft_strlen(dst)
 					+ ft_strlen(replacement) + 1));
-		ft_strlcpy(ptr, src, strstr(src, dst) - src + 1);
+		ft_strlcpy(ptr, src, ft_strstr(src, dst) - src);
 		ft_strlcat(ptr, replacement, ft_strlen(ptr) + ft_strlen(replacement)
-				+ 1);
-		ft_strlcat(ptr, strstr(src, dst) + ft_strlen(dst), ft_strlen(ptr)
-				+ ft_strlen(strstr(src, dst) + ft_strlen(dst)) + 1);
+			+ 1);
+		ft_strlcat(ptr, ft_strstr(src, dst) + ft_strlen(dst), ft_strlen(ptr)
+			+ ft_strlen(ft_strstr(src, dst) + ft_strlen(dst)) + 1);
 	}
 	else
 		ptr = ft_strdup(src);
-	// printf("return ptr = %s\n",ptr);
+	if (src)
+		free(src);
 	return (ptr);
 }
 
 char	*ft_strreplace_all(char *src, char *dst, char *replacement)
 {
-	// printf("inside ft_strreplace_all is src = \'%s\' dst = \'%s\' replacement = \'%s\'\n",src, dst , replacement);
 	char	*ptr;
 	char	*tmp;
 
-	ptr = ft_strdup(src);
-	while (strstr(ptr, dst))
-	{
-		tmp = ft_strreplace(ptr, dst, replacement);
-		free(ptr);
-		
-		ptr = tmp;
-	}
+	ptr = ft_strreplace(src, dst, replacement);
 	return (ptr);
 }
 
-int	ft_strcmp(char *s1, char *s2)
+int	count_var(char *str, char c)
 {
-	if(!s1 || !s2)
-		return 1;
-	// printf("compair =>  s1 = %s s2 = %s\n",s1,s2);
-	int i;
+	int	count;
+	int	i;
 
+	count = 0;
 	i = 0;
-	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
+	while (str[i])
+	{
+		if (str[i] == c)
+			count++;
 		i++;
-	return (s1[i] - s2[i]);
+	}
+	return (count);
 }
-

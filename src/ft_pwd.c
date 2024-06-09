@@ -1,25 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alakhida <alakhida@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: alakhida <alakhida@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/27 17:47:36 by alakhida          #+#    #+#             */
-/*   Updated: 2022/10/27 18:37:10 by alakhida         ###   ########.fr       */
+/*   Created: 2024/05/05 06:47:08 by alakhida          #+#    #+#             */
+/*   Updated: 2024/05/16 01:03:58 by alakhida         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/minishell.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int	ft_pwd(t_cmd *cmds)
 {
-	int	i;
+	char	*buff;
 
-	i = 0;
-	while (s[i] > '\0')
-	{
-		write(fd, &s[i], 1);
-		i++;
-	}
+	buff = getcwd(NULL, 0);
+	if (buff != NULL)
+		printf("%s\n", buff);
+	free(buff);
+	return (0);
 }
